@@ -56,7 +56,6 @@ namespace ToDoListBack.Controllers
 
             toDoItem.Name = ToDoItemDTO.Name;
             toDoItem.IsComplete = ToDoItemDTO.IsComplete;
-            toDoItem.Created = ToDoItemDTO.Created;
 
             try
             {
