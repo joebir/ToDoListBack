@@ -338,3 +338,10 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+.config
+.dockerignore
+appsettings.*
+Dockerfile
+Migrations/
+Properties/
