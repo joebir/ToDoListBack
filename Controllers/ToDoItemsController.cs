@@ -20,15 +20,14 @@ namespace ToDoListBack.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoItemDTO>>> GetToDoItems()
+        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItems()
         {
             return await _context.ToDoItems
-                .Select(x => ItemToDTO(x))
                 .ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoItemDTO>> GetToDoItem(long id)
+        public async Task<ActionResult<ToDoItem>> GetToDoItem(long id)
         {
             var toDoItem = await _context.ToDoItems.FindAsync(id);
 
@@ -37,13 +36,13 @@ namespace ToDoListBack.Controllers
                 return NotFound();
             }
 
-            return ItemToDTO(toDoItem);
+            return toDoItem;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateToDoItem(long id, ToDoItemDTO ToDoItemDTO)
+        public async Task<IActionResult> UpdateToDoItem(long id, ToDoItem ToDoItem)
         {
-            if (id != ToDoItemDTO.Id)
+            if (id != ToDoItem.Id)
             {
                 return BadRequest();
             }
@@ -54,8 +53,8 @@ namespace ToDoListBack.Controllers
                 return NotFound();
             }
 
-            toDoItem.Name = ToDoItemDTO.Name;
-            toDoItem.IsComplete = ToDoItemDTO.IsComplete;
+            toDoItem.Name = ToDoItem.Name;
+            toDoItem.IsComplete = ToDoItem.IsComplete;
 
             try
             {
@@ -70,12 +69,12 @@ namespace ToDoListBack.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ToDoItemDTO>> CreateToDoItem(ToDoItemDTO ToDoItemDTO)
+        public async Task<ActionResult<ToDoItem>> CreateToDoItem(ToDoItem ToDoItem)
         {
             var toDoItem = new ToDoItem
             {
-                IsComplete = ToDoItemDTO.IsComplete,
-                Name = ToDoItemDTO.Name,
+                IsComplete = false,
+                Name = ToDoItem.Name,
                 Created = DateTime.UtcNow,
             };
 
@@ -85,7 +84,7 @@ namespace ToDoListBack.Controllers
             return CreatedAtAction(
                 nameof(GetToDoItem),
                 new { id = toDoItem.Id },
-                ItemToDTO(toDoItem));
+                toDoItem);
         }
 
         [HttpDelete("{id}")]
@@ -106,14 +105,5 @@ namespace ToDoListBack.Controllers
 
         private bool ToDoItemExists(long id) =>
              _context.ToDoItems.Any(e => e.Id == id);
-
-        private static ToDoItemDTO ItemToDTO(ToDoItem toDoItem) =>
-            new ToDoItemDTO
-            {
-                Id = toDoItem.Id,
-                Name = toDoItem.Name,
-                IsComplete = toDoItem.IsComplete,
-                Created = toDoItem.Created
-            };
     }
 }

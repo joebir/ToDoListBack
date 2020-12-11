@@ -25,7 +25,9 @@ namespace ToDoListBack
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.WithOrigins("http://localhost:4200",
-                        "https://to-do-list-project4.herokuapp.com/");
+                        "https://joebir.github.io");
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
                 });
             });
             services.AddDbContext<ToDoItemContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
